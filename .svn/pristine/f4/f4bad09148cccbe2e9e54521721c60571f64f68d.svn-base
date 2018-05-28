@@ -1,0 +1,225 @@
+<template>
+  <div class="vacation-wrapper">
+    <cube-form :model="model" :schema="schema" :immediate-validate="false" :options="options" @validate="validateHandler" @submit="submitHandler"
+      @reset="resetHandler"></cube-form>
+  </div>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        validity: {},
+        valid: undefined,
+        model: {
+          selectValue: '',
+          startTime: '',
+          endTime: '',
+          totaltime: '',
+          reason: '',
+          area: '',
+          uploadValue: []
+        },
+        schema: {
+          groups: [
+            {
+              fields: [{
+                type: 'select',
+                modelKey: 'selectValue',
+                label: '请假类型',
+                props: {
+                  options: ['事假', '其它', '婚假'],
+                  placeholder: '请选择请假类型'
+                },
+                rules: {
+                  required: true
+                }
+              }]
+            },
+            {
+              legend: '请假时长',
+              fields: [{
+                type: 'input',
+                modelKey: 'startTime',
+                label: '开始时间',
+                props: {
+                  placeholder: '请选择开始时间'
+                },
+                rules: {
+                  required: true
+                },
+                events: {
+                  focus: () => {
+                    // alert('5555')
+                    // console.log(this)
+                    if (!this.dateTimePicker) {
+                      this.dateTimePicker = this.$createDatePicker({
+                        title: '',
+                        min: new Date(2008, 7, 8, 8, 0, 0),
+                        max: new Date(2020, 9, 20, 20, 59, 59),
+                        value: new Date(),
+                        columnCount: 6,
+                        onSelect: this.selectHandle
+                      })
+                    }
+                    this.dateTimePicker.show()
+                  }
+                }
+              }, {
+                type: 'input',
+                modelKey: 'endTime',
+                label: '结束时间',
+                props: {
+                  placeholder: '请选择结束时间'
+                },
+                rules: {
+                  required: true
+                },
+                events: {
+                  focus: () => {
+                    // alert('5555')
+                    // console.log(this)
+                    if (!this.dateTimePickers) {
+                      this.dateTimePickers = this.$createDatePicker({
+                        title: '',
+                        min: new Date(2008, 7, 8, 8, 0, 0),
+                        max: new Date(2020, 9, 20, 20, 59, 59),
+                        value: new Date(),
+                        columnCount: 6,
+                        onSelect: this.selectHandles
+                      })
+                    }
+                    this.dateTimePickers.show()
+                  }
+                }
+              }, {
+                type: 'input',
+                modelKey: 'totaltime',
+                label: '时长',
+                props: {
+                  placeholder: '最少0.5天'
+                },
+                rules: {
+                  required: true
+                },
+                // validating when blur
+                trigger: 'blur'
+              }]
+            },
+            {
+              legend: '请假事由',
+              fields: [
+                {
+                type: 'input',
+                modelKey: 'reason',
+                label: '请假事由',
+                props: {
+                  placeholder: '请输入请假事由'
+                },
+                rules: {
+                  required: true
+                },
+                // validating when blur
+                trigger: 'blur'
+              }, {
+                type: 'input',
+                modelKey: 'area',
+                label: '外出地点',
+                props: {
+                  placeholder: '请输入外出地点'
+                },
+                // validating when blur
+                trigger: 'blur'
+              }]
+            },
+            {
+            legend: '上传文件',
+            fields: [
+              {
+                type: 'upload',
+                modelKey: 'uploadValue',
+                events: {
+                  'file-removed': (...args) => {
+                    console.log('file removed', args)
+                  }
+                },
+                rules: {
+                  required: true,
+                  uploaded: (val, config) => {
+                    return Promise.all(val.map((file, i) => {
+                      return new Promise((resolve, reject) => {
+                        if (file.uploadedUrl) {
+                          return resolve()
+                        }
+                        // fake request
+                        setTimeout(() => {
+                          if (i % 2) {
+                            reject(new Error())
+                          } else {
+                            file.uploadedUrl = 'uploaded/url'
+                            resolve()
+                          }
+                        }, 1000)
+                      })
+                    })).then(() => {
+                      return true
+                    })
+                  }
+                },
+                messages: {
+                  uploaded: '上传失败'
+                }
+              }]
+            },
+            {
+              fields: [{
+                type: 'submit',
+                label: '提交'
+              },
+              {
+                type: 'reset',
+                label: '重置'
+              }]
+            }
+          ]
+        },
+        options: {
+          scrollToInvalidField: true,
+          layout: 'standard' // classic fresh
+        }
+      }
+    },
+    methods: {
+      submitHandler (e) {
+        e.preventDefault()
+        console.log('submit', e)
+      },
+      validateHandler (result) {
+        this.validity = result.validity
+        this.valid = result.valid
+        console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
+      },
+      resetHandler (e) {
+        console.log('reset', e)
+      },
+      selectHandle (date, selectedVal) {
+        this.model.startTime = selectedVal.join('-')
+      },
+      selectHandles (date, selectedVal) {
+        this.model.endTime = selectedVal.join('-')
+      }
+    }
+  }
+</script>
+
+
+<style lang="stylus" scoped>
+  .vacation-wrapper 
+    position fixed 
+    left 0 
+    right 0 
+    top 44px 
+    bottom 0 
+    background #ccc
+    overflow-y auto
+</style>
