@@ -1,7 +1,8 @@
 import fetch from '@/utils/fetch'
 import qs from 'qs'
 import { getImgUrl } from '@/utils/operation' // 处理图片路径
-const HTTP = 'http://192.168.199.98:8086'
+// const HTTP = 'http://192.168.199.98:8086'
+const HTTP = 'http://192.168.30.177:8086'
 // 获取申请人的审批人
 export function fetchApproval(taskType, lengthOfTime) {
   let data = {

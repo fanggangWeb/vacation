@@ -9,7 +9,7 @@
               <div class="leaveType"><p>请假类型：</p><p>{{item.leaveType}}</p></div>
               <div class="startTime"><p>开始时间：</p><p>{{item.startTime}}</p></div>
               <div class="endedTime"><p>结束时间：</p><p>{{item.endedTime}}</p></div>
-              <div class="state">等待 {{item.state}} 审批中</div>
+              <div class="state">{{item.state}}</div>
           </div>
         </cube-index-list-item>
       </cube-index-list-group>

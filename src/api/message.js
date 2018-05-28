@@ -1,6 +1,6 @@
 export function MessageSuccess (content) {
   let box =
-    `<div class="box" style="text-align: center;
+    `<div class="messagegreenbox" style="text-align: center;
       min-width: 380px;
       box-sizing: border-box;
       border-radius: 4px;
@@ -35,7 +35,7 @@ export function MessageSuccess (content) {
   }
   append(document.body, box)
   setTimeout(() => {
-    var arr = document.getElementsByClassName('box')
+    var arr = document.getElementsByClassName('messagegreenbox')
     for (let i = 0; i < arr.length; i++) {
       if (arr[i] != null) {
         arr[i].parentNode.removeChild(arr[i])
@@ -45,7 +45,7 @@ export function MessageSuccess (content) {
 }
 export function MessageError (content) {
   let box =
-    `<div class="box" style="text-align: center;
+    `<div class="messageredbox" style="text-align: center;
       min-width: 380px;
       box-sizing: border-box;
       border-radius: 4px;
@@ -80,7 +80,7 @@ export function MessageError (content) {
   }
   append(document.body, box)
   setTimeout(() => {
-    var arr = document.getElementsByClassName('box')
+    var arr = document.getElementsByClassName('messageredbox')
     for (let i = 0; i < arr.length; i++) {
       if (arr[i] != null) {
         arr[i].parentNode.removeChild(arr[i])
